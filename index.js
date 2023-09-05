@@ -1,11 +1,12 @@
 const app = require("./express/app");
 const path = require("path");
 const { getNumber } = require("@lykmapipo/env");
+require("dotenv").config();
 // const app = require(path.join(__dirname, "express/app"));
 // const sequelize = require("./sequelize");
 const { sequelize } = require(path.join(__dirname, "models"));
 
-const PORT = getNumber("PORT", 5000);
+const PORT = getNumber("PORT", process.env.API_PORT);
 
 async function assertDatabaseConnectionOk() {
 	console.log(`Checking database connection...`);
@@ -22,7 +23,7 @@ async function assertDatabaseConnectionOk() {
 async function init() {
 	await assertDatabaseConnectionOk();
 
-	console.log(`Starting Sequelize + Express example on port ${PORT}...`);
+	console.log(`Starting API server on port ${PORT}...`);
 
 	app.listen(PORT, () => {
 		console.log(
