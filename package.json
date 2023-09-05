@@ -1,24 +1,32 @@
 {
-  "name": "sustainable-records-api",
+  "name": "pixel-insurance-api",
   "version": "1.0.0",
-  "description": "",
+  "description": "Rest APIs for Pixel Insurance",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Michael Kimollo",
+  "author": "Pixel Insurance Team",
   "license": "ISC",
   "dependencies": {
     "@lykmapipo/env": "github:lykmapipo/env",
+    "async": "^3.2.4",
     "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
+    "express-useragent": "^1.0.15",
+    "express-validator": "^7.0.1",
+    "express-winston": "^4.2.0",
     "faker": "^5.5.3",
     "lodash": "^4.17.21",
     "mysql2": "^2.3.0",
-    "sequelize": "^6.6.5"
+    "sequelize": "^6.6.5",
+    "validator": "^13.11.0",
+    "winston": "^3.10.0"
   },
   "devDependencies": {
+    "nodemon": "^3.0.1",
     "sequelize-cli": "^6.2.0"
   }
 }
