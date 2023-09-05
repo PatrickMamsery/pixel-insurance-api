@@ -1,0 +1,8 @@
+{
+    "require-dev": {
+        "mysql-workbench-schema-exporter/doctrine2-exporter": "^3.1"
+    },
+    "require": {
+        "mysql-workbench-schema-exporter/node-exporter": "^3.1"
+    }
+}
