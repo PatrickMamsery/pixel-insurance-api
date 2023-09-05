@@ -8,14 +8,35 @@ module.exports = {
 				primaryKey: true,
 				type: Sequelize.INTEGER,
 			},
-			name: {
+			userName: {
 				type: Sequelize.STRING,
+				allowNull: false,
+			},
+			firstName: {
+				type: Sequelize.STRING,
+				allowNull: false,
+			},
+			lastName: {
+				type: Sequelize.STRING,
+				allowNull: false,
 			},
 			email: {
 				type: Sequelize.STRING,
 			},
 			phone: {
 				type: Sequelize.STRING,
+			},
+			gender: {
+				type: Sequelize.ENUM("male", "female", "other", "unknown"),
+				defaultValue: "unknown",
+			},
+			dateOfBirth: {
+				type: Sequelize.DATE,
+				allowNull: true,
+			},
+			isVerified: {
+				type: Sequelize.BOOLEAN,
+				defaultValue: false,
 			},
 			password: {
 				type: Sequelize.STRING,
