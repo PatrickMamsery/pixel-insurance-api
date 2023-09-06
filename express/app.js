@@ -5,6 +5,9 @@ const bodyParser = require("body-parser");
 
 const userRouter = require(path.join(__dirname, "routers", "user.router"));
 
+const authRouter = require(path.join(__dirname, "routers", "auth.router"));
+
+
 // app.use(cors());
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -17,6 +20,12 @@ app.get("/", (request, response) => {
 	response.json({ status: "ok" });
 });
 
+// ================== ROUTES ==================
+
+// ================== USER ROUTES ==================
 app.use("/api/users", userRouter);
+
+// ================== AUTH ROUTES ==================
+app.use("/api/auth", authRouter);
 
 module.exports = app;
