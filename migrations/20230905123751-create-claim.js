@@ -25,7 +25,7 @@ module.exports = {
 				onDelete: "NO ACTION",
 				onUpdate: "NO ACTION",
 				references: {
-					model: "claimType",
+					model: "claimTypes",
 					key: "id",
 					as: "claimTypeId",
 				},
