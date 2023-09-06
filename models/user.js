@@ -63,7 +63,9 @@ module.exports = (sequelize, DataTypes) => {
 				onDelete: "NO ACTION",
 				onUpdate: "NO ACTION",
 				references: {
-					model: "Roles",
+					model: {
+						tableName: "roles",
+					},
 					key: "id",
 					as: "roleId",
 				},
@@ -81,6 +83,7 @@ module.exports = (sequelize, DataTypes) => {
 		{
 			sequelize,
 			modelName: "User",
+			tableName: "users",
 		}
 	);
 
