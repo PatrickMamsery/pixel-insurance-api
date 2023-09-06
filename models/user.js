@@ -39,6 +39,8 @@ module.exports = (sequelize, DataTypes) => {
 			},
 			email: {
 				type: Sequelize.STRING,
+				allowNull: false,
+				unique: true,
 			},
 			phone: {
 				type: Sequelize.STRING,
@@ -56,6 +58,7 @@ module.exports = (sequelize, DataTypes) => {
 			},
 			password: {
 				type: Sequelize.STRING,
+				allowNull: false,
 			},
 			roleId: {
 				type: Sequelize.INTEGER,

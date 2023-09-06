@@ -5,13 +5,14 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-		"start": "nodemon index.js"
+    "start": "nodemon index.js"
   },
   "author": "Pixel Insurance Team",
   "license": "ISC",
   "dependencies": {
     "@lykmapipo/env": "github:lykmapipo/env",
     "async": "^3.2.4",
+    "bcrypt": "^5.1.1",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
@@ -29,5 +30,14 @@
   "devDependencies": {
     "nodemon": "^3.0.1",
     "sequelize-cli": "^6.2.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PatrickMamsery/pixel-insurance-api.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/PatrickMamsery/pixel-insurance-api/issues"
+  },
+  "homepage": "https://github.com/PatrickMamsery/pixel-insurance-api#readme"
 }
