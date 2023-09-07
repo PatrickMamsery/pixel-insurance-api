@@ -21,6 +21,7 @@
     "express-validator": "^7.0.1",
     "express-winston": "^4.2.0",
     "faker": "^5.5.3",
+    "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
     "mysql2": "^2.3.0",
     "sequelize": "^6.6.5",

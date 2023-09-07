@@ -7,7 +7,13 @@ const routes = require('./routers/routes');
 
 const app = express();
 
-// Middleware for parsing JSON request bodies
+const userRouter = require(path.join(__dirname, "routers", "user.router"));
+
+const authRouter = require(path.join(__dirname, "routers", "auth.router"));
+
+
+// app.use(cors());
+// parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(bodyParser.json());
@@ -15,7 +21,12 @@ app.use(bodyParser.json());
 // Middleware for handling CORS
 app.use(cors());
 
-// Routes
-app.use('/', routes);
+// ================== ROUTES ==================
+
+// ================== USER ROUTES ==================
+app.use("/api/users", userRouter);
+
+// ================== AUTH ROUTES ==================
+app.use("/api/auth", authRouter);
 
 module.exports = app;
