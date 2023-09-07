@@ -7,9 +7,9 @@ const routes = require('./routers/routes');
 
 const app = express();
 
-const userRouter = require(path.join(__dirname, "routers", "user.router"));
-
-const authRouter = require(path.join(__dirname, "routers", "auth.router"));
+// ================== MIDDLEWARE ==================
+// app.use(express.json());
+// app.use(express.urlencoded({ extended: true }));
 
 
 // app.use(cors());
@@ -22,11 +22,6 @@ app.use(bodyParser.json());
 app.use(cors());
 
 // ================== ROUTES ==================
-
-// ================== USER ROUTES ==================
-app.use("/api/users", userRouter);
-
-// ================== AUTH ROUTES ==================
-app.use("/api/auth", authRouter);
+app.use("/", routes);
 
 module.exports = app;

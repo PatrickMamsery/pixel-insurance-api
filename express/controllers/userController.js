@@ -1,7 +1,8 @@
 // controllers/UserController.js
 const path = require("path");
 const models = require(path.join(__dirname, "..", "..", "models")); // Import your User model
-const { paginate } = require(path.join(__dirname, "..", "..", "helpers")); // Import your pagination helper
+const { paginate, sendResponse, sendError } = require(path.join(__dirname, "..", "..", "helpers")); // Import your pagination helper
+const UserResource = require('./../resources/userResource'); // Resource for formatting data
 
 class UserController {
 	static index(req, res) {
@@ -27,13 +28,18 @@ class UserController {
 			],
 		})
 			.then(({ count, rows: users }) => {
-				const paginatedUsers = paginate(users, count, page, size);
+				// Format the data before sending it
+				const formattedUsers = users.map((user) => new UserResource(user).formatData());
 
-				res.status(200).json(paginatedUsers);
+				const paginatedUsers = paginate(formattedUsers, count, page, size);
+
+				// res.status(200).json(paginatedUsers);
+				sendResponse(res, paginatedUsers, "Users retrieved successfully", 200);
 			})
 			.catch((error) => {
 				console.error(error);
-				res.status(500).json({ error: "Internal Server Error" });
+				// res.status(500).json({ error: "Internal Server Error" });
+				sendError(error, "Internal Server Error", 500);
 			});
 	}
 
@@ -48,11 +54,16 @@ class UserController {
 					return res.status(404).json({ error: "User not found" });
 				}
 
-				res.status(200).json(user);
+				// Format the data before sending it
+				const formattedUser = new UserResource(user).formatData();
+
+				// res.status(200).json(formattedUser);
+				sendResponse(res, formattedUser, "User retrieved successfully", 200);
 			})
 			.catch((error) => {
 				console.error(error);
-				res.status(500).json({ error: "Internal Server Error" });
+				// res.status(500).json({ error: "Internal Server Error" });
+				sendError(error, "Internal Server Error", 500);
 			});
 	}
 }
