@@ -27,4 +27,7 @@ router.put("/api/profile/:userId", UserController.updateProfile);
 // ==================RESET PASSWORD ROUTES===============
 router.put("/api/reset_password/:userId", AuthController.resetPassword);
 
+//=================VERIFY OTP=====================
+router.post("/api/verify_otp", AuthController.verifyOTP)
+
 module.exports = router;
