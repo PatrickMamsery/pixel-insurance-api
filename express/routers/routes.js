@@ -21,4 +21,9 @@ router.get("/api/users/:id", UserController.show);
 router.post("/api/register", AuthController.register);
 router.post("/api/login", AuthController.login);
 
+// ================== PROFILE ROUTES ===================
+router.put("/api/profile/:userId", UserController.updateProfile);
+
+// ==================RESET PASSWORD ROUTES===============
+
 module.exports = router;

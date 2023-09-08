@@ -3,6 +3,7 @@ const path = require("path");
 const models = require(path.join(__dirname, "..", "..", "models")); // Import your User model
 const { paginate, sendResponse, sendError } = require(path.join(__dirname, "..", "..", "helpers")); // Import your pagination helper
 const UserResource = require('./../resources/userResource'); // Resource for formatting data
+const { sequelize } = require("../../models");
 
 class UserController {
 	static index(req, res) {
@@ -66,6 +67,30 @@ class UserController {
 				sendError(error, "Internal Server Error", 500);
 			});
 	}
+
+	// UPDATE user
+
+	// DELETE user
+
+	// UPDATE PROFILE
+	static updateProfile(req, res) {
+		const userId = req.params.userId;
+		const { email, phone, firstName, lastName } = req.body;
+	
+		models.User.update(
+			{ email, phone, firstName, lastName },
+			{ where: { id: userId } }
+		)
+		.then(() => {
+			console.log('User profile updated successfully');
+			res.status(200).json({ message: 'User profile updated successfully' });
+		})
+		.catch((err) => {
+			console.error('Error updating user profile:', err);
+			res.status(500).json({ error: 'Internal server error' });
+		});
+	}
+	
 }
 
 module.exports = UserController;
