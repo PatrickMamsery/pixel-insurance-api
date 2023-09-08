@@ -113,6 +113,26 @@ class AuthController {
       res.status(500).json({ error: 'Internal Server Error' });
     }
   }
+
+  //reset password function start here
+  static resetPassword(req, res) {
+		const userId = req.params.userId;
+		const { email, password } = req.body;
+
+	
+		models.User.update(
+			{ email, password },
+			{ where: { id: userId } }
+		)
+		.then(() => {
+			console.log('You have successfully update your password!!');
+			res.status(200).json({ message: 'You have successfully update your password!! isahau tena kuku wewe' });
+		})
+		.catch((err) => {
+			console.error('Error updating user password:', err);
+			res.status(500).json({ error: 'Internal server error' });
+		});
+	}
 }
 
 module.exports = AuthController;

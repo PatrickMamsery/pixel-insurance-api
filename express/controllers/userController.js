@@ -76,6 +76,7 @@ class UserController {
 	static updateProfile(req, res) {
 		const userId = req.params.userId;
 		const { email, phone, firstName, lastName } = req.body;
+
 	
 		models.User.update(
 			{ email, phone, firstName, lastName },
