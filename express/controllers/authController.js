@@ -90,6 +90,49 @@ class AuthController {
     }
   }
 
+	// Registration Version 2: Register with only NIDA ID and phone number
+	static async registerV2(req, res) {
+		try {
+			// Validation rules for registration
+			const validationRules = [
+				check('nidaId', 'NIDA ID is required').notEmpty(),
+				check('phone', 'Phone number is required').notEmpty(),
+				check('phone', 'Phone number must be 10 digits').isLength({ min: 10, max: 10 }),
+			];
+
+			// Check for validation errors
+			await Promise.all(validationRules.map(validation => validation.run(req)));
+
+			const errors = validationResult(req);
+
+			if (!errors.isEmpty()) {
+				const errorMessages = errors.array().map(error => error.msg);
+				return res.status(400).json({ errors: errorMessages });
+			}
+
+			const { nidaId, phone } = req.body;
+
+			// Check if the user already exists
+			const existingUser = await models.User.findOne({ where: { phone } });
+
+			if (existingUser) {
+				return res.status(400).json({ error: 'User already exists' });
+			}
+
+			// Create a new user
+			const user = await models.User.create({ nidaId, phone });
+
+			// Generate a JWT token for the user
+			const token = jwt.sign({ userId: user.id }, secretKey, { expiresIn: '7d' });
+
+			res.status(201).json({ user, token });
+
+		} catch (error) {
+			console.error(error);
+			res.status(500).json({ error: 'Internal Server Error' });
+		}
+	}
+
   static async login(req, res) {
     try {
       // Validation rules for login
