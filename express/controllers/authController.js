@@ -30,12 +30,12 @@ class AuthController {
     try {
       // Validation rules for registration
       const validationRules = [
-        check('userName', 'Username is required').notEmpty(),
-        check('firstName', 'First name is required').notEmpty(),
-        check('lastName', 'Last name is required').notEmpty(),
-        check('email', 'Email is required').isEmail(),
-        check('phone', 'Phone is required').notEmpty(),
-        check('password', 'Password is required').notEmpty(),
+        check('userName', 'userName is required').notEmpty(),
+        check('firstName', 'firstName is required').notEmpty(),
+        check('lastName', 'lastName is required').notEmpty(),
+        check('email', 'email is required').isEmail(),
+        check('phone', 'phone is required').notEmpty(),
+        check('password', 'password is required').notEmpty(),
 
         check('roleId').custom(async (roleId, { req }) => {
           // Check if roleId exists in the roles table
@@ -134,36 +134,36 @@ class AuthController {
   }
 
   //reset password function start here
-  
+
 
 
   static async resetPassword(req, res) {
     try {
       const { userId } = req.params; // Get the userId from the request parameters
       const { email } = req.body;
-  
+
       // Generate a 5-digit random OTP
       const otp = crypto.randomInt(10000, 99999);
       otpStore[userId] = otp; // Store the OTP with the userId
-  
+
       // Create email content
       const mailOptions = {
-        from: 'rubeajuma8@gmail.com',
+        from: mailUsername,
         to: email,
         subject: 'Password Reset OTP',
         text: `Your OTP for password reset is: ${otp}`,
       };
-  
+
       // Send the email
       await transporter.sendMail(mailOptions);
-  
+
       res.json({ message: 'OTP sent successfully' });
     } catch (error) {
       console.error('Error sending OTP:', error);
       res.status(500).json({ message: 'Failed to send OTP' });
     }
   }
-  
+
 
   static verifyOTP(req, res) {
     try {
