@@ -199,3 +199,5 @@ class ClaimController {
 		}
 	}
 }
+
+module.exports = ClaimController;
