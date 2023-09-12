@@ -9,3 +9,20 @@ exports.paginate = (data, count, page, limit) => {
 
 	return { data, totalItems, totalPages, currentPage, nextPage, size: limit };
 };
+
+exports.sendResponse = (res, data, message, statusCode = 200) => {
+	res.status(statusCode).json({
+		status: "success",
+		data,
+		message,
+		statusCode: statusCode,
+	});
+};
+
+exports.sendError = (res, error, statusCode = 500) => {
+	res.status(statusCode).json({
+		status: "error",
+		error,
+		statusCode: statusCode,
+	});
+}
