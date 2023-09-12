@@ -24,15 +24,15 @@ module.exports = (sequelize, DataTypes) => {
 			},
 			userName: {
 				type: Sequelize.STRING,
-				allowNull: false,
+				allowNull: true,
 			},
 			firstName: {
 				type: Sequelize.STRING,
-				allowNull: false,
+				allowNull: true,
 			},
 			lastName: {
 				type: Sequelize.STRING,
-				allowNull: false,
+				allowNull: true,
 			},
 			email: {
 				type: Sequelize.STRING,

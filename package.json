@@ -10,6 +10,7 @@
   "author": "Pixel Insurance Team",
   "license": "ISC",
   "dependencies": {
+    "@handlebars/allow-prototype-access": "^1.0.5",
     "@lykmapipo/env": "github:lykmapipo/env",
     "async": "^3.2.4",
     "bcrypt": "^5.1.1",
@@ -18,6 +19,7 @@
     "crypto": "^1.0.1",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
+    "express-handlebars": "^7.1.2",
     "express-useragent": "^1.0.15",
     "express-validator": "^7.0.1",
     "express-winston": "^4.2.0",

@@ -6,12 +6,12 @@ const { validationResult, check } = require('express-validator'); // Import the 
 require('dotenv').config();
 
 const secretKey = process.env.JWT_SECRET;
+const crypto = require('crypto');
+const nodemailer = require('nodemailer');
 const mailUsername = process.env.MAIL_USERNAME;
 const mailPassword = process.env.MAIL_PASSWORD;
 
 
-const crypto = require('crypto');
-  const nodemailer = require('nodemailer');
 
   // Initialize the transporter for sending emails
   const transporter = nodemailer.createTransport({
@@ -90,12 +90,98 @@ class AuthController {
     }
   }
 
+	// ========== REGISTER V2 ==========
+	static async registerV2(req, res) {
+		try {
+			// Validation rules for registration
+			const validationRules = [
+				check('phone', 'phone field is required').notEmpty(),
+				check('nidaNumber', 'nidaNumber field is required').notEmpty(),
+
+				// check('roleId').custom(async (roleId, { req }) => {
+				// 	// Check if roleId exists in the roles table
+				// 	const role = await models.Role.findOne({ where: { id: roleId } });
+				// 	if (!role) {
+				// 		throw new Error('Invalid roleId');
+				// 	}
+				// }).notEmpty(),
+			];
+
+			// Check for validation errors
+			await Promise.all(validationRules.map(validation => validation.run(req)));
+
+			const errors = validationResult(req);
+			if (!errors.isEmpty()) {
+				const errorMessages = errors.array().map(error => error.msg);
+				return res.status(400).json({ errors: errorMessages });
+			}
+
+			const { phone, nidaNumber } = req.body;
+
+			// Check if the user already exists
+			const existingUser = await models.User.findOne({ where: { phone } });
+			if (existingUser) {
+				return res.status(400).json({ error: 'User already exists' });
+			}
+
+			// Generate a 5-digit random OTP
+			// const otp = crypto.randomInt(10000, 99999);
+			// otpStore[phone] = otp; // Store the OTP with the phone number
+
+			// Create email content
+			// const mailOptions = {
+			// 	from: mailUsername,
+			// 	to: email,
+			// 	subject: 'OTP for Registration',
+			// 	text: `Your OTP for registration is: ${otp}`,
+			// };
+
+			// Send the email
+			// await transporter.sendMail(mailOptions);
+
+			// Get other details from API call to NIDA
+			// getNidaDetails(nidaNumber);
+
+			// Hash the password before saving it
+			const hashedPassword = await bcrypt.hash(phone, 10);
+
+			// create role or find role
+			const role = await models.Role.findOne({ where: { name: "user" } });
+			const roleId = role ? role.id : 3; // Get the id if a role with the name "user" was found, otherwise use the default id of 3
+
+			// Generate a random email address of the form: phone@localhost
+			const email = `${phone}@localhost`;
+
+			// Create a new user
+			const user = await models.User.create(
+				{
+					phone,
+					password: hashedPassword,
+					nidaNumber,
+					email,
+					roleId
+				}
+			);
+
+			// Generate a JWT token for the user
+			const token = jwt.sign({ userId: user.id }, secretKey, { expiresIn: '7d' });
+
+			res.status(201).json({ user, token });
+
+		} catch (error) {
+			console.error(error);
+			res.status(500).json({ error: 'Internal Server Error' });
+		}
+	}
+
+	// ========== LOGIN ==========
+
   static async login(req, res) {
     try {
       // Validation rules for login
       const validationRules = [
-        check('userName', 'Username is required').notEmpty(),
-        check('password', 'Password is required').notEmpty()
+        check('phone', 'phone field is required').notEmpty(),
+        check('password', 'password field is required').notEmpty()
       ];
 
       // Check for validation errors
@@ -107,10 +193,10 @@ class AuthController {
         return res.status(400).json({ errors: errorMessages });
       }
 
-      const { userName, password } = req.body;
+      const { phone, password } = req.body;
 
-      // Find the user by their username
-      const user = await models.User.findOne({ where: { userName } });
+      // Find the user by their phone number
+      const user = await models.User.findOne({ where: { phone } });
 
       if (!user) {
         return res.status(401).json({ error: 'Authentication failed' });
@@ -133,9 +219,7 @@ class AuthController {
     }
   }
 
-  //reset password function start here
-
-
+  // ========== RESET PASSWORD ==========
 
   static async resetPassword(req, res) {
     try {
@@ -164,7 +248,7 @@ class AuthController {
     }
   }
 
-
+	// ========== VERIFY OTP ==========
   static verifyOTP(req, res) {
     try {
       const { email, otp } = req.body;
@@ -184,6 +268,39 @@ class AuthController {
       res.status(500).json({ message: 'Failed to verify OTP' });
     }
   }
+
+	// ========== CHANGE PASSWORD ==========
+	static async changePassword(req, res) {
+		try {
+			const { userId } = req.params; // Get the userId from the request parameters
+			const { password } = req.body;
+
+			// Hash the password before saving it
+			const hashedPassword = await bcrypt.hash(password, 10);
+
+			// Update the user's password
+			await models.User.update(
+				{ password: hashedPassword },
+				{ where: { id: userId } }
+			);
+
+			res.json({ message: 'Password changed successfully' });
+		} catch (error) {
+			console.error('Error changing password:', error);
+			res.status(500).json({ message: 'Failed to change password' });
+		}
+	}
+
+	// ========== GET USER DETAILS ==========
+	static async getNidaDetails(nidaNumber) {
+		try {
+			const response = await fetch(`https://nida.go.tz/api/kyc/${nidaNumber}`);
+			const data = await response.json();
+			return data;
+		} catch (error) {
+			console.error('Error getting NIDA details:', error);
+		}
+	}
 }
 
 module.exports = AuthController;

@@ -18,7 +18,7 @@ router.get("/api/users", UserController.index);
 router.get("/api/users/:id", UserController.show);
 
 // ================== AUTH ROUTES ==================
-router.post("/api/register", AuthController.register);
+router.post("/api/register", AuthController.registerV2);
 router.post("/api/login", AuthController.login);
 
 // ================== PROFILE ROUTES ===================
