@@ -11,17 +11,34 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+			CargoRecord.belongsTo(models.UserPolicy, { as: "policy" });
     }
   };
   CargoRecord.init({
-    policyId: DataTypes.INTEGER,
-    itemId: DataTypes.INTEGER,
-    itemValue: DataTypes.DECIMAL,
-    procumentDocument: DataTypes.STRING
+    policyId: {
+			type: DataTypes.INTEGER,
+			allowNull: false,
+			onDelete: "NO ACTION",
+			onUpdate: "NO ACTION",
+			references: {
+				model: "userPolicies",
+				key: "id",
+				as: "policyId",
+			},
+		},
+    itemValue: {
+			type: DataTypes.INTEGER,
+			allowNull: true,
+			defaultValue: 0.0,
+		},
+    procumentDocument: {
+			type: DataTypes.STRING,
+		}
   }, {
     sequelize,
     modelName: 'CargoRecord',
     tableName: 'cargoRecords',
   });
+
   return CargoRecord;
 };

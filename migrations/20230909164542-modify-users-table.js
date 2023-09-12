@@ -19,10 +19,14 @@ module.exports = {
     });
 
     // Add a new column called nidaId
-    await queryInterface.addColumn('users', 'nidaId', {
-      type: Sequelize.STRING,
-      allowNull: true, // Make nidaId nullable
-    });
+    // check first if the column exists
+		const tableInfo = await queryInterface.describeTable('users');
+		if (!tableInfo.nidaId) {
+			await queryInterface.addColumn('users', 'nidaId', {
+				type: Sequelize.STRING,
+				allowNull: true,
+			});
+		}
   },
 
   down: async (queryInterface, Sequelize) => {
