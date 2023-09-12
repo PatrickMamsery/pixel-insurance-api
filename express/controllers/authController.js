@@ -157,7 +157,7 @@ class AuthController {
 				{
 					phone,
 					password: hashedPassword,
-					nidaNumber,
+					nidaId: nidaNumber,
 					email,
 					roleId
 				}
