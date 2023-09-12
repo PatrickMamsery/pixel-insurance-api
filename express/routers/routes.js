@@ -13,21 +13,25 @@ router.get("/", (req, res) => {
 	  res.status(200).json({ message: "Welcome to the API" });
 });
 
-// ================== USER ROUTES ==================
-router.get("/api/users", UserController.index);
-router.get("/api/users/:id", UserController.show);
-
 // ================== AUTH ROUTES ==================
-router.post("/api/register", AuthController.registerV2);
-router.post("/api/login", AuthController.login);
+	// ================== USER ROUTES ==================
+	router.get("/api/users", UserController.index);
+	router.get("/api/users/:id", UserController.show);
 
-// ================== PROFILE ROUTES ===================
-router.put("/api/profile/:userId", UserController.updateProfile);
+	// ================== AUTH ROUTES ==================
+	router.post("/api/register", AuthController.registerV2);
+	router.post("/api/login", AuthController.login);
 
-// ==================RESET PASSWORD ROUTES===============
-router.put("/api/reset_password/:userId", AuthController.resetPassword);
+	// ================== PROFILE ROUTES ===================
+	router.put("/api/profile/:userId", UserController.updateProfile);
 
-//=================VERIFY OTP=====================
-router.post("/api/verify_otp", AuthController.verifyOTP)
+	// ==================RESET PASSWORD ROUTES===============
+	router.put("/api/reset_password/:userId", AuthController.resetPassword);
+
+	//=================VERIFY OTP=====================
+	router.post("/api/verify_otp", AuthController.verifyOTP)
+
+// ================== END AUTH ROUTES ==================
+
 
 module.exports = router;
