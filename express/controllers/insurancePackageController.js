@@ -27,7 +27,7 @@ class InsurancePackageController {
 		})
 			.then(({ count, rows: packages }) => {
 				// Format the data before sending it
-				const formattedPackages = packages.map((package) => new packageResource(package).formatData());
+				const formattedPackages = packages.map((item) => new packageResource(item).formatData());
 
 				const paginatedPackages = paginate(formattedPackages, count, page, size);
 
@@ -46,14 +46,15 @@ class InsurancePackageController {
 		const { id } = req.params; // Extract the 'id' parameter from the request URL
 
 		models.Package.findByPk(id)
-			.then((package) => {
-				if (!package) {
+			.then((item) => {
+				// instead of 'package' use item to resolve error
+				if (!item) {
 					// package not found
 					return res.status(404).json({ error: "package not found" });
 				}
 
 				// Format the data before sending it
-				const formattedPackage = new packageResource(package).formatData();
+				const formattedPackage = new packageResource(item).formatData();
 
 				// res.status(200).json(formattedPackage);
 				sendResponse(res, formattedPackage, "package retrieved successfully", 200);
@@ -82,6 +83,71 @@ class InsurancePackageController {
 		} catch (error) {
 
 		}
+	}
+
+	// PUT /packages/:id
+	static update (req, res) {
+		const { id } = req.params; // Extract the 'id' parameter from the request URL
+
+		models.Package.findByPk(id)
+			.then((item) => {
+				if (!item) {
+					// package not found
+					return res.status(404).json({ error: "package not found" });
+				}
+
+				// Update the package
+				item
+					.update(req.body)
+					.then((updatedItem) => {
+						// Format the data before sending it
+						const formattedPackage = new packageResource(updatedItem).formatData();
+
+						// res.status(200).json(formattedPackage);
+						sendResponse(res, formattedPackage, "package updated successfully", 200);
+					})
+					.catch((error) => {
+						console.error(error);
+						// res.status(500).json({ error: "Internal Server Error" });
+						sendError(error, "Internal Server Error", 500);
+					});
+			})
+			.catch((error) => {
+				console.error(error);
+				// res.status(500).json({ error: "Internal Server Error" });
+				sendError(error, "Internal Server Error", 500);
+			});
+	}
+
+	// DELETE /packages/:id
+	static destroy (req, res) {
+		const { id } = req.params; // Extract the 'id' parameter from the request URL
+
+		models.Package.findByPk(id)
+			.then((item) => {
+				if (!item) {
+					// package not found
+					return res.status(404).json({ error: "Package not found" });
+				}
+
+				// Delete the package
+				item
+					.destroy()
+					.then(() => {
+						// res.status(200).json({ message: "package deleted successfully" });
+						sendResponse(res, null, "package deleted successfully", 200);
+					})
+					.catch((error) => {
+						console.error(error);
+						// res.status(500).json({ error: "Internal Server Error" });
+						sendError(error, "Internal Server Error", 500);
+					});
+			})
+			.catch((error) => {
+				console.error(error);
+				// res.status(500).json({ error: "Internal Server Error" });
+				sendError(error, "Internal Server Error", 500);
+			});
 	}
 }
 

@@ -142,6 +142,15 @@ class AuthController {
 			// Get other details from API call to NIDA
 			// getNidaDetails(nidaNumber);
 
+			// Customized NIDA number for testing
+			// Check if the NIDA number exists in your data
+			const nidaData = require('../data/nidaData.js'); // Load the data from the file
+			const userData = nidaData[nidaNumber];
+
+			if (!userData) {
+					return res.status(400).json({ error: 'NIDA number not found' });
+			}
+
 			// Hash the password before saving it
 			const hashedPassword = await bcrypt.hash(phone, 10);
 
@@ -159,7 +168,11 @@ class AuthController {
 					password: hashedPassword,
 					nidaId: nidaNumber,
 					email,
-					roleId
+					roleId,
+					firstName: userData.firstName,
+					lastName: userData.lastName,
+					dateOfBirth: userData.dateOfBirth,
+					gender: userData.gender,
 				}
 			);
 

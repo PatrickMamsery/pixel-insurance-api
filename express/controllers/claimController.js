@@ -198,6 +198,83 @@ class ClaimController {
 			sendError(error, "Internal Server Error", 500);
 		}
 	}
+
+	// GET /user/:id/claims
+	static indexUserClaims (req, res) {
+		const { id } = req.params; // Extract the 'id' parameter from the request URL
+
+		models.User.findByPk(id)
+			.then((user) => {
+				if (!user) {
+					// User not found
+					return res.status(404).json({ error: "User not found" });
+				}
+
+				user
+					.getClaims()
+					.then((claims) => {
+						// Format the data before sending it
+						const formattedClaims = claims.map((claim) => new ClaimResource(claim).formatData());
+
+						// res.status(200).json(formattedClaims);
+						sendResponse(res, formattedClaims, "Claims retrieved successfully", 200);
+
+					})
+					.catch((error) => {
+						console.error(error);
+						// res.status(500).json({ error: "Internal Server Error" });
+						sendError(error, "Internal Server Error", 500);
+					});
+			})
+			.catch((error) => {
+				console.error(error);
+				// res.status(500).json({ error: "Internal Server Error" });
+				sendError(error, "Internal Server Error", 500);
+			});
+	}
+
+	// GET /user/:id/claims/:id
+	static showUserClaim (req, res) {
+		const { id, claimId } = req.params; // Extract the 'id' parameter from the request URL
+
+		models.User.findByPk(id)
+			.then((user) => {
+				if (!user) {
+					// User not found
+					return res.status(404).json({ error: "User not found" });
+				}
+
+				user
+					.getClaims({
+						where: {
+							id: claimId,
+						},
+					})
+					.then((claims) => {
+						if (!claims.length) {
+							// Claim not found
+							return res.status(404).json({ error: "Claim not found" });
+						}
+
+						// Format the data before sending it
+						const formattedClaim = new ClaimResource(claims[0]).formatData();
+
+						// res.status(200).json(formattedClaim);
+						sendResponse(res, formattedClaim, "Claim retrieved successfully", 200);
+
+					})
+					.catch((error) => {
+						console.error(error);
+						// res.status(500).json({ error: "Internal Server Error" });
+						sendError(error, "Internal Server Error", 500);
+					});
+			})
+			.catch((error) => {
+				console.error(error);
+				// res.status(500).json({ error: "Internal Server Error" });
+				sendError(error, "Internal Server Error", 500);
+			});
+	}
 }
 
 module.exports = ClaimController;
