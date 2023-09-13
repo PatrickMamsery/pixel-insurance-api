@@ -236,12 +236,19 @@ class AuthController {
 
   static async resetPassword(req, res) {
     try {
-      const { userId } = req.params; // Get the userId from the request parameters
+      // const { userId } = req.params; // Get the userId from the request parameters
       const { email } = req.body;
+
+			// check if the user with the email exists
+			// const user = await models.User.findOne({ where: { email } });
+
+			// if (!user) {
+			// 	return res.status(400).json({ error: 'User with provided email not found' });
+			// }
 
       // Generate a 5-digit random OTP
       const otp = crypto.randomInt(10000, 99999);
-      otpStore[userId] = otp; // Store the OTP with the userId
+      // otpStore[userId] = otp; // Store the OTP with the userId
 
       // Create email content
       const mailOptions = {
