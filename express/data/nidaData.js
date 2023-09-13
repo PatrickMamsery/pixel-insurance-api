@@ -70,3 +70,5 @@ var NIN_API = {
         gender: "female"
     }
 };
+
+module.exports = NIN_API;
