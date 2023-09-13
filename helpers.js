@@ -11,18 +11,28 @@ exports.paginate = (data, count, page, limit) => {
 };
 
 exports.sendResponse = (res, data, message, statusCode = 200) => {
-	res.status(statusCode).json({
+	if (statusCode >= 200 && statusCode < 300) {
+	  res.status(statusCode).json({
 		status: "success",
-		data,
+		...data,
 		message,
 		statusCode: statusCode,
-	});
-};
-
-exports.sendError = (res, error, statusCode = 500) => {
-	res.status(statusCode).json({
+	  });
+	} else {
+	  res.status(statusCode).json({
 		status: "error",
-		error,
+		error: data,
+		message,
 		statusCode: statusCode,
+	  });
+	}
+  };
+
+  exports.sendError = (res, error, statusCode = 500) => {
+	res.status(statusCode).json({
+	  status: "error",
+	  error,
+	  statusCode: statusCode,
 	});
-}
+  };
+
