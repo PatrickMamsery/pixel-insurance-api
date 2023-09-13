@@ -92,13 +92,13 @@ router.get("/", (req, res) => {
 
 	// ================== TRANSACTION ROUTES ==================
 	// For Dashboard use
-	// router.get("/api/transactions", TransactionController.index);
-	// router.get("/api/transactions/:id", TransactionController.show);
+	router.get("/api/transactions", TransactionController.index);
+	router.get("/api/transactions/:id", TransactionController.show);
 
-	// // For User use
-	// router.get("/api/user/:id/transactions", TransactionController.indexUserTransactions);
-	// router.get("/api/user/:id/transactions/:id", TransactionController.showUserTransaction);
-	// router.post("/api/transactions", TransactionController.store);
+	// For User use
+	router.get("/api/user/:id/transactions", TransactionController.indexUserTransactions);
+	router.get("/api/user/:id/transactions/:id", TransactionController.showUserTransaction);
+	router.post("/api/transactions", TransactionController.store);
 
 	// ================== END MISC ROUTES ==================
 
