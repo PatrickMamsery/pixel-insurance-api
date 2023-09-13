@@ -246,9 +246,9 @@ class AuthController {
 			// 	return res.status(400).json({ error: 'User with provided email not found' });
 			// }
 
-      // Generate a 5-digit random OTP
-      const otp = crypto.randomInt(10000, 99999);
-      // otpStore[userId] = otp; // Store the OTP with the userId
+      // Generate a 6-digit random OTP
+      const otp = crypto.randomInt(100000, 999999);
+      otpStore[email] = otp; // Store the OTP with the userId
 
       // Create email content
       const mailOptions = {
