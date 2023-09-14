@@ -12,17 +12,12 @@ class InsurancePackageController {
 	static index (req, res) {
 		const { page = 0, size = 10 } = req.query;
 
-		models.Package.findAndCountAll({
+		models.InsurancePackage.findAndCountAll({
 			limit: size,
 			offset: page * size,
 			include: [
 				// Include related models as needed
 				// For example, include the Role model
-				{
-					model: models.PackageType,
-					as: "packageType",
-					attributes: ["id", "name"],
-				},
 			],
 		})
 			.then(({ count, rows: packages }) => {
@@ -37,7 +32,7 @@ class InsurancePackageController {
 			.catch((error) => {
 				console.error(error);
 				// res.status(500).json({ error: "Internal Server Error" });
-				sendError(error, "Internal Server Error", 500);
+				sendError(res, error.message, 500);
 			});
 	}
 
@@ -45,12 +40,12 @@ class InsurancePackageController {
 	static show (req, res) {
 		const { id } = req.params; // Extract the 'id' parameter from the request URL
 
-		models.Package.findByPk(id)
+		models.InsurancePackage.findByPk(id)
 			.then((item) => {
 				// instead of 'package' use item to resolve error
 				if (!item) {
 					// package not found
-					return res.status(404).json({ error: "package not found" });
+					return res.status(404).json({ error: "Package not found" });
 				}
 
 				// Format the data before sending it
@@ -80,6 +75,33 @@ class InsurancePackageController {
 			// Check for validation errors
 			await Promise.all(validationRules.map(validation => validation.run(req)));
 
+			const errors = validationResult(req);
+
+			if (!errors.isEmpty()) {
+				return res.status(422).json({ errors: errors.array() });
+			}
+
+			// const { name, coverageFocus, deductible, claimProcessingTime } = req.body;
+
+			// check if package already exists by checking name
+			const existingPackage = await models.InsurancePackage.findOne({ where: { name } });
+			if (existingPackage) {
+				return res.status(400).json({ error: "Package already exists" });
+			}
+
+			// Create the package
+			models.InsurancePackage.create(req.body).then((item) => {
+				// Format the data before sending it
+				const formattedPackage = new packageResource(item).formatData();
+
+				// res.status(201).json(formattedPackage);
+				sendResponse(res, formattedPackage, "package created successfully", 201);
+			}).catch((error) => {
+				console.error(error);
+				sendError(res, error.message, 500);
+			});
+
+
 		} catch (error) {
 
 		}
@@ -89,7 +111,7 @@ class InsurancePackageController {
 	static update (req, res) {
 		const { id } = req.params; // Extract the 'id' parameter from the request URL
 
-		models.Package.findByPk(id)
+		models.InsurancePackage.findByPk(id)
 			.then((item) => {
 				if (!item) {
 					// package not found
@@ -123,7 +145,7 @@ class InsurancePackageController {
 	static destroy (req, res) {
 		const { id } = req.params; // Extract the 'id' parameter from the request URL
 
-		models.Package.findByPk(id)
+		models.InsurancePackage.findByPk(id)
 			.then((item) => {
 				if (!item) {
 					// package not found
