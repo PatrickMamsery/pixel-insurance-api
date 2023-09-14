@@ -13,3 +13,5 @@ class InsurancePackageResource {
 		};
 	}
 }
+
+module.exports = InsurancePackageResource;
