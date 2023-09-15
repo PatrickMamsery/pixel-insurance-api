@@ -173,6 +173,7 @@ class AuthController {
 					lastName: userData.lastName,
 					dateOfBirth: userData.dateOfBirth,
 					gender: userData.gender,
+					nidaId: nidaNumber,
 				}
 			);
 

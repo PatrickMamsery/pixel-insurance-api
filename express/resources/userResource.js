@@ -9,8 +9,11 @@ class UserResource {
 			userName: this.data.userName,
 			firstName: this.data.firstName,
 			lastName: this.data.lastName,
+			email: this.data.email,
 			phone: this.data.phone,
 			gender: this.data.gender,
+			dateOfBirth: this.data.dateOfBirth,
+			nidaId: this.data.nidaId,
 		};
 	}
 }
