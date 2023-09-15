@@ -70,7 +70,10 @@ module.exports = (sequelize, DataTypes) => {
 					as: "roleId",
 				},
 			},
-
+			nidaId: {
+				type: Sequelize.STRING,
+				allowNull: true,
+			},
 			createdAt: {
 				allowNull: false,
 				type: Sequelize.DATE,

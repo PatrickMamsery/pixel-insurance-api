@@ -1,11 +1,11 @@
 var _ = require("lodash");
 
 exports.paginate = (data, count, page, limit) => {
-	console.log("adfdfasdfsa");
+	// console.log("adfdfasdfsa");
 	const totalItems = count;
-	const currentPage = page;
-	const nextPage = page + 1;
+	const currentPage = parseInt(page);
 	const totalPages = _.ceil(totalItems / limit);
+	const nextPage = (parseInt(page) + 1) * limit < totalItems ? parseInt(page) + 1 : null;
 
 	return { data, totalItems, totalPages, currentPage, nextPage, size: limit };
 };
